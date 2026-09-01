@@ -1,0 +1,45 @@
+# ── Web framework (already in venv) ─────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+python-multipart>=0.0.20
+
+# ── LLM ──────────────────────────────────────────────────────────────────────
+ollama>=0.4.0
+
+# ── Embeddings ───────────────────────────────────────────────────────────────
+# BGE-M3: best multilingual model, native Turkish support, 8192-token context
+sentence-transformers>=3.0.0
+# Mac M-series (MPS):  pip install torch torchvision torchaudio
+# NVIDIA (CUDA):       pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# CPU-only:            pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+torch>=2.3.0
+
+# ── Vector store ─────────────────────────────────────────────────────────────
+chromadb>=1.0.0
+
+# ── Hybrid retrieval ─────────────────────────────────────────────────────────
+rank-bm25>=0.2.2
+
+# ── NLP ──────────────────────────────────────────────────────────────────────
+numpy>=1.26.0
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+loguru>=0.7.0
+
+# ── Config / env ─────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+
+# ── HTTP ─────────────────────────────────────────────────────────────────────
+httpx>=0.27.0
+aiohttp>=3.10.0
+requests>=2.32.0
+
+# ── Ingestion helpers ────────────────────────────────────────────────────────
+langchain-text-splitters>=0.2.0
+beautifulsoup4>=4.12.0
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

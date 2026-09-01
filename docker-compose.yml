@@ -1,0 +1,69 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Edirne Belediye Chatbot — Docker Compose
+#
+# Servisler:
+#   ollama   — Yerel LLM sunucusu (Qwen2.5 / Mistral)
+#   chatbot  — FastAPI uygulaması (RAG + classifiers)
+#
+# Başlatma:
+#   docker compose up -d
+#
+# İlk model indirme (bir kez):
+#   docker exec edirne_ollama ollama pull qwen2.5:7b
+#   docker exec edirne_ollama ollama pull BAAI/bge-m3
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: edirne_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  chatbot:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: edirne_chatbot
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=qwen2.5:7b
+      - EMBEDDING_MODEL_NAME=BAAI/bge-m3
+      - EMBEDDING_DEVICE=cpu
+      - CHROMA_PERSIST_DIRECTORY=/app/data/chroma_db
+      - CHROMA_COLLECTION_NAME=edirne_kb
+      - LOG_JSON=true
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      # .env'den okumak için: env_file: .env
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  ollama_models:
+    name: edirne_ollama_models

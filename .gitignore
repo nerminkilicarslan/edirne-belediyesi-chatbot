@@ -1,0 +1,35 @@
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Private data
+data/
+
+# Logs
+logs/
+*.log
+
+# Vector database
+chroma_db/
+data/chroma_db/
+*.sqlite
+*.sqlite3
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
